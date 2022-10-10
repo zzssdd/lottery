@@ -1,0 +1,439 @@
+{
+  "components": {
+    "requestBodies": {
+      "prizePrizeAddRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Prize"
+            }
+          }
+        },
+        "description": "prizePrizeAddRequest"
+      },
+      "prizePrizeDelRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/IdRequest"
+            }
+          }
+        },
+        "description": "prizePrizeDelRequest"
+      },
+      "prizePrizeEditRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Prize"
+            }
+          }
+        },
+        "description": "prizePrizeEditRequest"
+      },
+      "prizePrizeInfoRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/IdRequest"
+            }
+          }
+        },
+        "description": "prizePrizeInfoRequest"
+      },
+      "prizePrizeListRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ListRequest"
+            }
+          }
+        },
+        "description": "prizePrizeListRequest"
+      }
+    },
+    "responses": {
+      "MicroAPIError": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "Code": {
+                  "description": "Error code",
+                  "example": 500,
+                  "type": "number"
+                },
+                "Detail": {
+                  "description": "Error detail",
+                  "example": "service not found",
+                  "type": "string"
+                },
+                "Id": {
+                  "description": "Error ID",
+                  "type": "string"
+                },
+                "Status": {
+                  "description": "Error status message",
+                  "example": "Internal Server Error",
+                  "type": "string"
+                }
+              },
+              "title": "MicroAPIError",
+              "type": "object"
+            }
+          }
+        },
+        "description": "Error from the Micro API"
+      },
+      "prizePrizeAddResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Response"
+            }
+          }
+        },
+        "description": "prizePrizeAddResponse"
+      },
+      "prizePrizeDelResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Response"
+            }
+          }
+        },
+        "description": "prizePrizeDelResponse"
+      },
+      "prizePrizeEditResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Response"
+            }
+          }
+        },
+        "description": "prizePrizeEditResponse"
+      },
+      "prizePrizeInfoResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Prize"
+            }
+          }
+        },
+        "description": "prizePrizeInfoResponse"
+      },
+      "prizePrizeListResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ListResponse"
+            }
+          }
+        },
+        "description": "prizePrizeListResponse"
+      }
+    },
+    "schemas": {
+      "IdRequest": {
+        "properties": {
+          "id": {
+            "format": "int32",
+            "type": "number"
+          }
+        },
+        "title": "IdRequest",
+        "type": "object"
+      },
+      "ListRequest": {
+        "properties": {
+          "pageNum": {
+            "format": "int32",
+            "type": "number"
+          },
+          "pageSize": {
+            "format": "int32",
+            "type": "number"
+          }
+        },
+        "title": "ListRequest",
+        "type": "object"
+      },
+      "ListResponse": {
+        "properties": {
+          "code": {
+            "format": "int32",
+            "type": "number"
+          },
+          "count": {
+            "format": "int32",
+            "type": "number"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "prizes": {
+            "items": {
+              "properties": {
+                "createTime": {
+                  "type": "string"
+                },
+                "id": {
+                  "format": "int32",
+                  "type": "number"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "num": {
+                  "format": "int32",
+                  "type": "number"
+                },
+                "pic": {
+                  "type": "string"
+                },
+                "probability": {
+                  "format": "double",
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "title": "ListResponse",
+        "type": "object"
+      },
+      "Prize": {
+        "properties": {
+          "createTime": {
+            "type": "string"
+          },
+          "id": {
+            "format": "int32",
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "num": {
+            "format": "int32",
+            "type": "number"
+          },
+          "pic": {
+            "type": "string"
+          },
+          "probability": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "title": "Prize",
+        "type": "object"
+      },
+      "Response": {
+        "properties": {
+          "code": {
+            "format": "int32",
+            "type": "number"
+          },
+          "msg": {
+            "type": "string"
+          }
+        },
+        "title": "Response",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "MicroAPIToken": {
+        "bearerFormat": "JWT",
+        "description": "Micro API token",
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "description": "Generated by protoc-gen-openapi",
+    "title": "Prize",
+    "version": "1",
+    "x-logo": {
+      "altText": "Micro logo",
+      "backgroundColor": "#FFFFFF",
+      "url": "https://micro.dev/images/brand.png"
+    }
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/prize/prize/PrizeAdd": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/prizePrizeAddRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/prizePrizeAddResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "prize.PrizeAdd(Prize)"
+      }
+    },
+    "/prize/prize/PrizeDel": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/prizePrizeDelRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/prizePrizeDelResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "prize.PrizeDel(IdRequest)"
+      }
+    },
+    "/prize/prize/PrizeEdit": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/prizePrizeEditRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/prizePrizeEditResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "prize.PrizeEdit(Prize)"
+      }
+    },
+    "/prize/prize/PrizeInfo": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/prizePrizeInfoRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/prizePrizeInfoResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "prize.PrizeInfo(IdRequest)"
+      }
+    },
+    "/prize/prize/PrizeList": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/prizePrizeListRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/prizePrizeListResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "prize.PrizeList(ListRequest)"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Micro dev environment"
+    }
+  ]
+}

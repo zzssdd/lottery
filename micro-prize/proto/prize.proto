@@ -1,0 +1,42 @@
+syntax="proto3";
+option go_package="./proto";
+package prize;
+
+service prize{
+  rpc PrizeList(ListRequest) returns (ListResponse){};
+  rpc PrizeAdd(Prize) returns(Response){}
+  rpc PrizeDel(NameRequest) returns(Response){}
+  rpc PrizeEdit(Prize) returns(Response){}
+  rpc PrizeInfo(NameRequest) returns(InfoResponse){}
+}
+
+message InfoResponse{
+  Prize prize=1;
+  int32 code=2;
+  string msg=3;
+}
+
+message Prize{
+  string name=1;
+  int32 num=2;
+  string pic=3;
+  string createTime=4;
+}
+
+message Response{
+  int32 code=1;
+  string msg=2;
+}
+
+message NameRequest{
+  string name=1;
+}
+
+message ListResponse{
+  int32 code=1;
+  string msg=2;
+  repeated Prize prizes=3;
+}
+
+message ListRequest{
+}

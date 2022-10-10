@@ -1,0 +1,63 @@
+syntax="proto3";
+option go_package="./proto";
+package order;
+
+service Order{
+  rpc OrderList(ListRequest) returns(ListResponse){};
+  rpc OrderUser(UserRequest) returns(UserResponse){};
+  rpc OrderAdd(AddRequest) returns(Response){};
+  rpc OrderDel(IdRequest) returns(Response){};
+}
+
+message IdRequest{
+  int32 id=1;
+}
+
+message Response{
+  int32 code=1;
+  string msg=2;
+}
+
+message AddRequest{
+  string email=1;
+  string name=2;
+}
+
+message UserOrder{
+  string name=1;
+  string pic=2;
+  string CreatTime=3;
+}
+
+message UserResponse{
+  int32 code=1;
+  string msg=2;
+  repeated UserOrder orders=3;
+  int32 count=4;
+}
+
+message UserRequest{
+  string email=1;
+  int32 pageNum=2;
+  int32 pageSize=3;
+}
+
+message OrderInfo{
+  int32 id=1;
+  string email=2;
+  string name=3;
+  string pic=4;
+  string CreatTime=5;
+}
+
+message ListResponse{
+  int32 code=1;
+  string msg=2;
+  int32 count=3;
+  repeated OrderInfo orders=4;
+}
+
+message ListRequest{
+  int32 pageNum=1;
+  int32 pageSize=2;
+}

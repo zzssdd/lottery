@@ -1,0 +1,17 @@
+syntax="proto3";
+option go_package="./proto";
+package choose;
+
+service Choose {
+  rpc DoChoose(Request) returns(Response);
+}
+
+message Request{
+  string email=1;
+}
+
+message Response{
+  int32 code=1;
+  string msg=2;
+  string name=3;
+}
