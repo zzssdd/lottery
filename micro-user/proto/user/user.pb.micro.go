@@ -45,6 +45,8 @@ type UserService interface {
 	Registry(ctx context.Context, in *RegistryRequest, opts ...client.CallOption) (*Response, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...client.CallOption) (*Response, error)
 	SendEmial(ctx context.Context, in *EmailRequest, opts ...client.CallOption) (*Response, error)
+	UpdateScore(ctx context.Context, in *UpdateRequest, opts ...client.CallOption) (*Response, error)
+	GetUserScore(ctx context.Context, in *EmailRequest, opts ...client.CallOption) (*ScoreResponse, error)
 }
 
 type userService struct {
@@ -89,12 +91,34 @@ func (c *userService) SendEmial(ctx context.Context, in *EmailRequest, opts ...c
 	return out, nil
 }
 
+func (c *userService) UpdateScore(ctx context.Context, in *UpdateRequest, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.name, "User.UpdateScore", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userService) GetUserScore(ctx context.Context, in *EmailRequest, opts ...client.CallOption) (*ScoreResponse, error) {
+	req := c.c.NewRequest(c.name, "User.GetUserScore", in)
+	out := new(ScoreResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for User service
 
 type UserHandler interface {
 	Registry(context.Context, *RegistryRequest, *Response) error
 	Login(context.Context, *LoginRequest, *Response) error
 	SendEmial(context.Context, *EmailRequest, *Response) error
+	UpdateScore(context.Context, *UpdateRequest, *Response) error
+	GetUserScore(context.Context, *EmailRequest, *ScoreResponse) error
 }
 
 func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.HandlerOption) error {
@@ -102,6 +126,8 @@ func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.Handl
 		Registry(ctx context.Context, in *RegistryRequest, out *Response) error
 		Login(ctx context.Context, in *LoginRequest, out *Response) error
 		SendEmial(ctx context.Context, in *EmailRequest, out *Response) error
+		UpdateScore(ctx context.Context, in *UpdateRequest, out *Response) error
+		GetUserScore(ctx context.Context, in *EmailRequest, out *ScoreResponse) error
 	}
 	type User struct {
 		user
@@ -124,4 +150,12 @@ func (h *userHandler) Login(ctx context.Context, in *LoginRequest, out *Response
 
 func (h *userHandler) SendEmial(ctx context.Context, in *EmailRequest, out *Response) error {
 	return h.UserHandler.SendEmial(ctx, in, out)
+}
+
+func (h *userHandler) UpdateScore(ctx context.Context, in *UpdateRequest, out *Response) error {
+	return h.UserHandler.UpdateScore(ctx, in, out)
+}
+
+func (h *userHandler) GetUserScore(ctx context.Context, in *EmailRequest, out *ScoreResponse) error {
+	return h.UserHandler.GetUserScore(ctx, in, out)
 }

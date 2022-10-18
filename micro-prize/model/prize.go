@@ -3,6 +3,7 @@ package model
 import (
 	"fmt"
 	"strconv"
+	"time"
 )
 
 type Prize struct {
@@ -13,7 +14,7 @@ type Prize struct {
 }
 
 func getRedisName(key string) string {
-	return fmt.Sprintf("lottery:prize", key)
+	return fmt.Sprintf("lottery:prize:%s", key)
 }
 
 func PrizeList() (prizes []*Prize, err error) {
@@ -33,12 +34,14 @@ func PrizeList() (prizes []*Prize, err error) {
 }
 
 func PrizeAdd(prize *Prize) error {
-	name := getRedisName(prize.Name)
+	name := prize.Name
 	err := Client.SAdd(getRedisName(""), name).Err()
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 	Client.HSet(name, "num", prize.Num)
@@ -48,12 +51,10 @@ func PrizeAdd(prize *Prize) error {
 }
 
 func PrizeDel(name string) error {
-	name = getRedisName(name)
 	err := Client.SRem(getRedisName(""), name).Err()
 	if err != nil {
 		return err
 	}
-	err = Client.HDel(name, "probability").Err()
 	if err != nil {
 		return err
 	}
@@ -64,26 +65,31 @@ func PrizeDel(name string) error {
 }
 
 func PrizeEdit(name string, prize *Prize) error {
-	name = getRedisName(name)
 	err := Client.SRem(getRedisName(""), name).Err()
 	if err != nil {
 		return err
 	}
+	Client.HDel(name, "num")
+	Client.HDel(name, "pic")
+	createTime, err := Client.HGet(name, "createTime").Result()
+	if err != nil {
+		createTime = time.Now().Format("2006-01-02 15:04:05")
+	}
+	Client.HDel(name, "createTime")
 	err = Client.SAdd(getRedisName(""), prize.Name).Err()
 	if err != nil {
 		return err
 	}
+	Client.HSet(prize.Name, "num", prize.Num)
 	if err != nil {
 		return err
 	}
-	Client.HSet(name, "num", prize.Num)
-	Client.HSet(name, "pic", prize.Pic)
-	Client.HSet(name, "createTime", prize.CreateTime)
+	Client.HSet(prize.Name, "pic", prize.Pic)
+	Client.HSet(prize.Name, "createTime", createTime)
 	return nil
 }
 
 func PrizeInfo(name string) (prize *Prize, err error) {
-	name = getRedisName(name)
 	value, _ := Client.HGetAll(name).Result()
 	num, _ := strconv.Atoi(value["num"])
 	prize = &Prize{

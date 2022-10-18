@@ -1,12 +1,14 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type User struct {
 	gorm.Model
 	Email    string `gorm:"type:string;not null"`
 	Password string `gorm:"type:string;not null"`
-	Score    int    `gorm:"type:int;Default:0"`
+	Score    int    `gorm:"type:int;Default:100"`
 }
 
 func UserRegistry(data *User) error {
@@ -21,8 +23,8 @@ func UserLogin(data *User) bool {
 
 func UserExist(email string) bool {
 	var count int64
-	err := Db.Model(&User{}).Where("Email=?", email).Error
-	return count > 0 && err == nil
+	err := Db.Where("Email=?", email).Find(&User{}).Count(&count).Error
+	return count == 0 && err == nil
 }
 
 func UserList(pageNum int, pageSize int) (count int64, users []*User, err error) {
@@ -33,4 +35,14 @@ func UserList(pageNum int, pageSize int) (count int64, users []*User, err error)
 
 func UserDel(id int) error {
 	return Db.Delete(&User{}, id).Error
+}
+
+func UserScore(id int, score int) error {
+	return Db.Model(User{}).Where("ID=?", id).Update("Score", score).Error
+}
+
+func GetUserScore(email string) (int, error) {
+	var user User
+	err := Db.Where("Email=?", email).First(&user).Error
+	return user.Score, err
 }

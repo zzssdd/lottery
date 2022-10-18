@@ -1,0 +1,102 @@
+syntax="proto3";
+option go_package="./proto";
+package active;
+
+service Activity{
+  rpc ActiveAdd(Request) returns(AddResponse);
+  rpc ActiveDel(IdRequest) returns(Response);
+  rpc ActiveEdit(EditRequest) returns(Response);
+  rpc ActiveList(ListRequest) returns(ListResponse);
+  rpc ActiveInfo(IdRequest) returns(InfoResponse);
+  rpc ActivePrizes(IdRequest) returns(PrizesResponse);
+  rpc ActiveAddPrize(PrizeAddRequest) returns(Response);
+}
+
+message AddResponse{
+  int32 code=1;
+  string msg=2;
+  int32 id=3;
+}
+
+message PrizeAddRequest{
+  int32 id=1;
+  string name=2;
+}
+
+
+message PrizesResponse{
+  repeated PrizeInfo prizes=1;
+  int32 code=2;
+  string msg=3;
+}
+
+message PrizeInfo{
+  string name=1;
+  int32 num=2;
+  string pic=3;
+  string createTime=4;
+}
+
+message ListRequest{
+  int32 pageNum=1;
+  int32 pageSize=2;
+}
+
+message InfoResponse{
+  ActiveInfo act=1;
+  repeated PrizeInfo prizes=2;
+  int32 code=3;
+  string msg=4;
+}
+
+message EditRequest{
+  int32 id=1;
+  string name=2;
+  string desc=3;
+  string pic=4;
+  string user=5;
+  int32 cost=6;
+  int32 type=7;
+  string startTime=8;
+  string endTime=9;
+}
+
+message ListResponse{
+  int32 code=1;
+  string msg=2;
+  int32 count=3;
+  repeated ActiveInfo acts=4;
+}
+
+message IdRequest{
+  int32 id=1;
+}
+
+message Response{
+  int32 code=1;
+  string msg=2;
+}
+
+message ActiveInfo{
+  int32 id=1;
+  string name=2;
+  string desc=3;
+  string pic=4;
+  string user=5;
+  int32 cost=6;
+  int32 type=7;
+  string startTime=8;
+  string endTime=9;
+}
+
+
+message Request{
+  string name=1;
+  string desc=2;
+  string pic=3;
+  string user=4;
+  int32 cost=5;
+  int32 type=6;
+  string startTime=7;
+  string endTime=8;
+}

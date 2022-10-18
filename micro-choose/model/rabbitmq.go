@@ -40,7 +40,7 @@ func LoadRabbitConf() (Conf *RabbitConf) {
 
 func init() {
 	conf := LoadRabbitConf()
-	dsn := fmt.Sprintf("amqp://%s:%s@%s:%s//%s",
+	dsn := fmt.Sprintf("amqp://%s:%s@%s:%s/%s",
 		conf.User,
 		conf.Password,
 		conf.Host,
@@ -56,4 +56,9 @@ func init() {
 		panic(err)
 	}
 	Ch.Qos(1, 0, false)
+}
+
+func Close() {
+	Ch.Close()
+	Conn.Close()
 }

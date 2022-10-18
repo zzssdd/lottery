@@ -12,7 +12,7 @@ import (
 
 func main() {
 	newRegistry := consul.NewRegistry(
-		registry.Addrs("127.0.0.1:8500"),
+		registry.Addrs("192.168.13.130:8500"),
 	)
 	service := micro.NewService(
 		micro.Name("micro-user"),

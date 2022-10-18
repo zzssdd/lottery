@@ -2,6 +2,7 @@ package control
 
 import (
 	"context"
+	"fmt"
 	"micro-prize/model"
 	"micro-prize/proto"
 )
@@ -34,12 +35,14 @@ func (p *Prize) PrizeList(ctx context.Context, in *proto.ListRequest, out *proto
 
 func (p *Prize) PrizeAdd(ctx context.Context, in *proto.Prize, out *proto.Response) error {
 	data := &model.Prize{
-		Name: in.Name,
-		Num:  int(in.Num),
-		Pic:  in.Pic,
+		Name:       in.Name,
+		Num:        int(in.Num),
+		Pic:        in.Pic,
+		CreateTime: in.CreateTime,
 	}
 	err := model.PrizeAdd(data)
 	if err != nil {
+		fmt.Println(err)
 		out.Code = 500
 		out.Msg = "增加奖品失败"
 		return err
@@ -52,6 +55,7 @@ func (p *Prize) PrizeAdd(ctx context.Context, in *proto.Prize, out *proto.Respon
 func (p *Prize) PrizeDel(ctx context.Context, in *proto.NameRequest, out *proto.Response) error {
 	err := model.PrizeDel(in.Name)
 	if err != nil {
+		fmt.Println(err)
 		out.Code = 500
 		out.Msg = "商品删除失败"
 		return err

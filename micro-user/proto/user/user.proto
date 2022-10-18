@@ -6,8 +6,21 @@ service User{
   rpc Registry(RegistryRequest) returns(Response){};
   rpc Login(LoginRequest) returns(Response){};
   rpc SendEmial(EmailRequest) returns(Response){};
+  rpc UpdateScore(UpdateRequest) returns(Response){};
+  rpc GetUserScore(EmailRequest) returns(ScoreResponse){};
 }
 
+message ScoreResponse{
+  int32 code=1;
+  string msg=2;
+  int32 score=3;
+}
+
+
+message UpdateRequest{
+  int32 id=1;
+  int32 score=2;
+}
 
 message EmailRequest{
   string email=1;

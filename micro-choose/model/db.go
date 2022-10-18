@@ -43,10 +43,10 @@ func LoadMysqlConf() (Conf *MysqlConf) {
 func init() {
 	conf := LoadMysqlConf()
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=true&loc=Local",
-		conf.Host,
-		conf.Port,
 		conf.User,
 		conf.Password,
+		conf.Host,
+		conf.Port,
 		conf.Database,
 	)
 	Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{

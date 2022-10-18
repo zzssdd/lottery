@@ -1,24 +1,26 @@
 package main
 
 import (
-	"micro-choose/handler"
-	pb "micro-choose/proto"
-
-	"github.com/micro/micro/v3/service"
-	"github.com/micro/micro/v3/service/logger"
+	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/registry"
+	"github.com/micro/go-micro/v2/util/log"
+	"github.com/micro/go-plugins/registry/consul/v2"
+	"micro-choose/control"
+	"micro-choose/proto"
 )
 
 func main() {
-	// Create service
-	srv := service.New(
-		service.Name("micro-choose"),
+	newRegistry := consul.NewRegistry(
+		registry.Addrs("192.168.13.130:8500"),
 	)
-
-	// Register handler
-	pb.RegisterMicroChooseHandler(srv.Server(), handler.New())
-
-	// Run service
-	if err := srv.Run(); err != nil {
-		logger.Fatal(err)
+	service := micro.NewService(
+		micro.Name("micro-choose"),
+		micro.Version("latest"),
+		micro.Registry(newRegistry),
+	)
+	service.Init()
+	proto.RegisterChooseHandler(service.Server(), new(control.Choose))
+	if err := service.Run(); err != nil {
+		log.Fatal(err)
 	}
 }

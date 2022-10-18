@@ -3,7 +3,7 @@ option go_package="./proto";
 package prize;
 
 service prize{
-  rpc PrizeList(ListRequest) returns (ListResponse){};
+  rpc PrizeList(ListRequest) returns (ListResponse){}
   rpc PrizeAdd(Prize) returns(Response){}
   rpc PrizeDel(NameRequest) returns(Response){}
   rpc PrizeEdit(Prize) returns(Response){}

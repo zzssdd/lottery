@@ -4,7 +4,6 @@ import (
 	"context"
 	"micro-user/model"
 	"micro-user/proto/admin"
-	"micro-user/utils"
 )
 
 type Admin struct {
@@ -13,7 +12,7 @@ type Admin struct {
 func (a *Admin) AdminLogin(ctx context.Context, in *admin.LoginRequest, out *admin.LoginResponse) error {
 	data := &model.Admin{
 		Username: in.Username,
-		Password: utils.Md5Pw(in.Password),
+		Password: in.Password,
 	}
 	is_ok := model.AdminLogin(data)
 	if !is_ok {

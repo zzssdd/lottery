@@ -2,6 +2,7 @@ package control
 
 import (
 	"context"
+	"fmt"
 	"github.com/patrickmn/go-cache"
 	"micro-user/model"
 	"micro-user/proto/user"
@@ -12,15 +13,17 @@ import (
 type User struct {
 }
 
-var code = cache.New(60*time.Second, 10*time.Second)
+var c = cache.New(60*time.Minute, 10*time.Minute)
 
 func (u *User) Registry(ctx context.Context, in *user.RegistryRequest, out *user.Response) error {
-	code, ok := code.Get(in.Email)
+	code, ok := c.Get(in.Email)
 	if !ok {
 		out.Code = 500
 		out.Msg = "未获取验证码"
 		return nil
 	}
+	fmt.Println(code)
+	fmt.Println(in.Code)
 	if code != in.Code {
 		out.Code = 500
 		out.Msg = "验证码输入不正确，请重新输入"
@@ -64,7 +67,7 @@ func (u *User) SendEmial(ctx context.Context, in *user.EmailRequest, out *user.R
 		return nil
 	}
 	num := utils.RandNum(6)
-	code.Set(email, code, cache.DefaultExpiration)
+	c.Set(email, num, cache.DefaultExpiration)
 	err := utils.SendEmail(email, num)
 	if err != nil {
 		out.Code = 500
@@ -73,5 +76,33 @@ func (u *User) SendEmial(ctx context.Context, in *user.EmailRequest, out *user.R
 	}
 	out.Code = 200
 	out.Msg = "发送验证码成功"
+	return nil
+}
+
+func (u *User) UpdateScore(ctx context.Context, in *user.UpdateRequest, out *user.Response) error {
+	id := in.Id
+	score := in.Score
+	err := model.UserScore(int(id), int(score))
+	if err != nil {
+		out.Code = 500
+		out.Msg = "更新用户积分失败"
+		return err
+	}
+	out.Code = 200
+	out.Msg = "更新用户积分成功"
+	return nil
+}
+
+func (u *User) GetUserScore(ctx context.Context, in *user.EmailRequest, out *user.ScoreResponse) error {
+	email := in.Email
+	score, err := model.GetUserScore(email)
+	if err != nil {
+		out.Code = 500
+		out.Msg = "获取用户积分失败"
+		return err
+	}
+	out.Code = 200
+	out.Msg = "获取用户积分成功"
+	out.Score = int32(score)
 	return nil
 }

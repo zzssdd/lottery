@@ -2,6 +2,7 @@ package control
 
 import (
 	"context"
+	"fmt"
 	"micro-order/model"
 	"micro-order/proto"
 )
@@ -12,6 +13,7 @@ type Order struct {
 func (o *Order) OrderList(ctx context.Context, in *proto.ListRequest, out *proto.ListResponse) error {
 	orders, count, err := model.OrderList(int(in.PageNum), int(in.PageSize))
 	if err != nil {
+		fmt.Println(err)
 		out.Code = 500
 		out.Msg = "获取订单列表失败！"
 		return err
